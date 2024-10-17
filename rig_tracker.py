@@ -3,15 +3,19 @@ import psutil
 import threading
 import time
 
+# Prompt the user for the computer name and port number
+computer_name = input("Enter the name of the computer: ")
+port_number = int(input("Enter the port number to use: "))
+
 app = Flask(__name__)
 
-vulcanus_status = "green"  
-process_list = []          
-system_memory = {}         
-system_cpu = []            
-system_memory_percent = [] 
+computer_status = "green"  # Assuming the computer is ON
+process_list = []          # Shared global variable for processes
+system_memory = {}         # Shared global variable for system memory usage
+system_cpu = []            # To store CPU usage over time
+system_memory_percent = [] # To store RAM usage over time
 
-N = 20  
+N = 20  # Number of processes to display in the table
 
 def update_system_stats():
     global process_list, system_memory, system_cpu, system_memory_percent
@@ -66,15 +70,16 @@ def update_system_stats():
 
 @app.route('/')
 def home():
-    return render_template('index.html', status=vulcanus_status)
+    return render_template('index.html', status=computer_status, computer_name=computer_name)
+
+@app.route('/status')
+def status_route():
+    return jsonify({'status': computer_status, 'computer_name': computer_name})
 
 @app.route('/processes')
 def processes_route():
     return jsonify(process_list)
 
-@app.route('/status')
-def status_route():
-    return jsonify({'status': vulcanus_status})
 
 @app.route('/memory')
 def memory_route():
@@ -89,4 +94,4 @@ def system_usage_route():
 
 if __name__ == '__main__':
     threading.Thread(target=update_system_stats, daemon=True).start()
-    app.run(host='0.0.0.0', port=6062)
+    app.run(host='0.0.0.0', port=port_number)

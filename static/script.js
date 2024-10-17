@@ -74,7 +74,9 @@ function fetchStatus() {
             const statusText = document.getElementById('status-text');
             statusLight.classList.remove('green', 'red');
             statusLight.classList.add(data.status);
-            statusText.textContent = data.status === 'green' ? 'Vulcanus is ON' : 'Vulcanus is OFF';
+            statusText.textContent = data.status === 'green'
+                ? `${data.computer_name} is ON`
+                : `${data.computer_name} is OFF`;
         })
         .catch(error => console.error('Error fetching status:', error));
 }
@@ -83,9 +85,12 @@ function fetchMemory() {
     fetch('/memory')
         .then(response => response.json())
         .then(data => {
-            document.getElementById('total-memory').textContent = (data.total / (1024 ** 3)).toFixed(2);
-            document.getElementById('used-memory').textContent = (data.used / (1024 ** 3)).toFixed(2);
-            document.getElementById('free-memory').textContent = (data.total / (1024 ** 3)-data.used/ (1024 ** 3)).toFixed(2);
+            const totalMemoryGB = data.total / (1024 ** 3);
+            const usedMemoryGB = data.used / (1024 ** 3);
+            const freeMemoryGB = data.available / (1024 ** 3);
+            document.getElementById('total-memory').textContent = totalMemoryGB.toFixed(2);
+            document.getElementById('used-memory').textContent = usedMemoryGB.toFixed(2);
+            document.getElementById('free-memory').textContent = freeMemoryGB.toFixed(2);
             document.getElementById('memory-percent').textContent = data.percent.toFixed(1);
         })
         .catch(error => console.error('Error fetching memory:', error));

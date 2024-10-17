@@ -107,14 +107,14 @@
 
     <!-- Content Container -->
     <div class="content-container">
-        <h1>Vulcanus Monitor</h1>
+        <h1>{{ computer_name }} Monitor</h1>
         <h2>Status:
             <span id="status-light" class="status-light {{ status }}"></span>
             <span id="status-text">
                 {% if status == 'green' %}
-                    Vulcanus is ON
+                    {{ computer_name }} is ON
                 {% else %}
-                    Vulcanus is OFF
+                    {{ computer_name }} is OFF
                 {% endif %}
             </span>
         </h2>

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vulcanus Monitor</title>
+    <style>
+        body {
+            margin: 2;
+            background-color: white;
+            color: black;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .dark-mode {
+            background-color: #121212;
+            color: white;
+        }
+        .status-light {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .status-light.green {
+            background-color: green;
+        }
+        .status-light.red {
+            background-color: red;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            table-layout: fixed;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+            white-space: nowrap;       
+            overflow: hidden;           
+            text-overflow: ellipsis;    
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .dark-mode th {
+            background-color: #1e1e1e;
+        }
+        tbody {
+            display: block;
+            height: 300px;              
+            overflow-y: scroll;         
+        }
+        thead, tbody tr {
+            display: table;
+            width: 100%;
+            table-layout: fixed;        
+        }
+
+        .dark-mode table {
+            border-color: #444;
+        }
+        .dark-mode th, .dark-mode td {
+            border-color: #444;
+        }
+        .dark-mode .status-light.green {
+            background-color: #00e676;
+        }
+        .dark-mode .status-light.red {
+            background-color: #ff5252;
+        }
+
+        .dark-mode-toggle {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 1000; 
+        }
+
+        .charts-container {
+            display: flex;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        .chart-container {
+            width: 50%;              
+            height: 50vh;            
+            box-sizing: border-box;
+            padding: 10px;
+        }
+        .chart {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+    <!-- Include Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Dark Mode Toggle -->
+    <div class="dark-mode-toggle">
+        <label>
+            <input type="checkbox" id="dark-mode-toggle">
+            Dark Mode
+        </label>
+    </div>
+
+    <!-- Content Container -->
+    <div class="content-container">
+        <h1>Vulcanus Monitor</h1>
+        <h2>Status:
+            <span id="status-light" class="status-light {{ status }}"></span>
+            <span id="status-text">
+                {% if status == 'green' %}
+                    Vulcanus is ON
+                {% else %}
+                    Vulcanus is OFF
+                {% endif %}
+            </span>
+        </h2>
+
+        <div>
+            <h3>System RAM Usage:</h3>
+            <p>Total Memory: <span id="total-memory"></span> GB</p>
+            <p>Used Memory: <span id="used-memory"></span> GB</p>
+            <p>Free Memory: <span id="free-memory"></span> GB</p>
+            <p>Memory Usage: <span id="memory-percent"></span>%</p>
+        </div>
+
+        <div>
+            <h3>Top 20 Processes by CPU Usage:</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Process Name</th>
+                        <th>CPU Usage (%)</th>
+                        <th>RAM Usage (%)</th>
+                    </tr>
+                </thead>
+                <tbody id="process-table-body">
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Charts Container -->
+        <div class="charts-container">
+            <!-- CPU Chart Container -->
+            <div class="chart-container">
+                <h3>CPU Usage Over Time:</h3>
+                <canvas id="cpuChart" class="chart"></canvas>
+            </div>
+
+            <!-- Memory Chart Container -->
+            <div class="chart-container">
+                <h3>RAM Usage Over Time:</h3>
+                <canvas id="memoryChart" class="chart"></canvas>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

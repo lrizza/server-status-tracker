@@ -85,7 +85,7 @@ function fetchMemory() {
         .then(data => {
             document.getElementById('total-memory').textContent = (data.total / (1024 ** 3)).toFixed(2);
             document.getElementById('used-memory').textContent = (data.used / (1024 ** 3)).toFixed(2);
-            document.getElementById('free-memory').textContent = (data.free / (1024 ** 3)).toFixed(2);
+            document.getElementById('free-memory').textContent = (data.total / (1024 ** 3)-data.used/ (1024 ** 3)).toFixed(2);
             document.getElementById('memory-percent').textContent = data.percent.toFixed(1);
         })
         .catch(error => console.error('Error fetching memory:', error));

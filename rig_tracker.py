@@ -70,7 +70,12 @@ def update_system_stats():
 
 @app.route('/')
 def home():
-    return render_template('index.html', status=computer_status, computer_name=computer_name)
+    return render_template(
+        'index.html',
+        status=computer_status,
+        computer_name=computer_name,
+        page_title=f"{computer_name} Rig Tracker",
+    )
 
 @app.route('/status')
 def status_route():
